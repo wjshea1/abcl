@@ -69,11 +69,12 @@ class ABCForm extends React.Component {
             businessid: '',
             groupid: '',
             intentid: '',
-            bodyText:''
+            messageText:''
         }
 
         this.handleSelection = this.handleSelection.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
 
         this.businessIdList = [
             {value: 'e8d4bb55-180c-11e8-8ba7-b97859c148c8', text: 'TD Ameritrade'}
@@ -113,8 +114,15 @@ class ABCForm extends React.Component {
         }
     }
 
+    handleChange(event){
+
+        this.setState({messageText: event.target.value})
+
+    }
+
+
     handleSubmit(event) {
-        let abcurl = generateURL(this.state.businessid, this.state.groupid, this.state.intentid, "");
+        let abcurl = generateURL(this.state.businessid, this.state.groupid, this.state.intentid, this.state.messageText);
         event.preventDefault();
         this.props.onDataChange(abcurl);
     }
@@ -149,7 +157,7 @@ class ABCForm extends React.Component {
                 <div>
                         <label>
                             <div>Message Text</div>
-                            <textarea  value={this.state.bodyText}></textarea>
+                            <textarea  value={this.state.messageText} onChange={this.handleChange}></textarea>
                         </label>
                 </div>
 
@@ -163,9 +171,17 @@ class ABCForm extends React.Component {
 function generateURL(businessID, groupID, intentID, messageText) {
     const groupIDAtrribName = "data-apple-business-group-id=";
     const intentIDAtrribName = "data-apple-business-intent-id=";
+    const bodyIDAtrribName = "data-apple-body-id=";
     const baseUrl = "https://bcrw.apple.com/urn:biz:";
 
     let URL = baseUrl + businessID + "?" + groupIDAtrribName + groupID + "&" + intentIDAtrribName + intentID;
+
+    if ( messageText.length != 0){ // if there is no message
+        URL=URL + "&" + bodyIDAtrribName + messageText;
+    }
+
+
+
     let encodedUrl = encodeURI( URL );
 
     return encodedUrl;

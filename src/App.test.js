@@ -7,3 +7,16 @@ it('renders without crashing', () => {
   ReactDOM.render(<App />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
+
+
+
+if('produces proper url for all paramerters', ()=> {
+
+    var businessid = "1234";
+    var groupid="TDAMobile";
+    var intentid="Marketing";
+    var body="";
+
+
+}
+);
